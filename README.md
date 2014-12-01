@@ -15,7 +15,7 @@ frequencyjs consists of the following packages
 
 To generate a signal simply do
 
-```
+```javascript
 var fjs = require("frequencyjs");
 fjs.Generator
   .sine({frequency:440})  // there will be different types here
@@ -27,14 +27,14 @@ fjs.Generator
 
 To analyse a signal you can use the DFT on any signal:
 
-```
+```javascript
 var spectrum = fjs.Transform
   .toSpectrum([1,0,-1,0,1,0,-1,0],{sampling: 8, method: 'dft'});
 ```
 
 If you want to use FFT you must keep in mind that the FFT only works on signals with a power of two length. Simply switch the method to `fft` and you get your FFT.
 
-```
+```javascript
 var spectrum = fjs.Transform
   .toSpectrum(signal,{method: 'fft'});
 ```
