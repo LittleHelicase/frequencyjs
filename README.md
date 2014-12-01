@@ -28,32 +28,28 @@ fjs.Generator
 To analyse a signal you can use the DFT on any signal:
 
 ```
-// sampling = samples per second
 var spectrum = fjs.Transform
   .toSpectrum([1,0,-1,0,1,0,-1,0],{sampling: 8, method: 'dft'});
-
-// get the whole spectrum [{frequency: 0, amplitude: 0},...]
-var spectrumArray = spectrum.data();
-
-// get the dominant frequency { frequency: 2, amplitude: 1 }
-var dominantFrequency = spectrum.dominantFrequency();
 ```
 
-To switch to FFT you must keep in mind that the FFT only allows for signals with a power of two length. Simply switch
-the method to `fft` and you get your FFT.
+If you want to use FFT you must keep in mind that the FFT only works on signals with a power of two length. Simply switch the method to `fft` and you get your FFT.
 
 ```
-// sampling = samples per second
 var spectrum = fjs.Transform
-  .toSpectrum([1,0,-1,0,1,0,-1,0],{sampling: 8, method: 'fft'});
-
-// get the whole spectrum [{frequency: 0, amplitude: 0},...]
-var spectrumArray = spectrum.data();
-
-// get the dominant frequency { frequency: 2, amplitude: 1 }
-var dominantFrequency = spectrum.dominantFrequency();
+  .toSpectrum(signal,{method: 'fft'});
 ```
 
+The signals created with the Generator above contain information about their sampling rate (`signal.sampling`) and thus it is possible to omit the sampling rate.
+
+## Spectrum
+
+A spectrum calculated with the `toSpectrum` method has the following methods:
+
+ - `data()`: returns a list of Frequencies with their amplitude <br>
+  e.g `[{frequency:0, amplitude:0},{...},...]`
+  The frequencies are always ascending.
+ - `dominantFrequency()`: returns the dominant frequency of the signal as an object containing the frequency and the amplitude <br>
+  e.g. `{frequency: 2, amplitude: 1}``
 
 # Acknowledgement
 
