@@ -29,4 +29,10 @@ describe("Fast Fourier Transform", function(){
             domFreq.frequency.should.equal(i)
         }
     });
+    it("should throw an exception if the signal length is not a power of two",
+      function(){
+        (function(){
+          Transform.toSpectrum([1,2,3],{method:"fft", sampling: 1});
+        }).should.throw(Error);
+      })
 });
