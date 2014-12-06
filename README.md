@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/LittleHelicase/frequencyjs.svg)](https://travis-ci.org/LittleHelicase/frequencyjs)
+
 # frequencyjs
 
 A library for computing the frequencies of signals. It will include 
