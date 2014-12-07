@@ -12,12 +12,14 @@ describe("Signal Convolution", function(){
     var conv = Signal.convolve(sig1,sig2);
     conv.should.deep.equal(sig1);
   });
-  it("alternating sequences", function(){
-    // sig = [1,0,-1,0,...]
+  it("constant sequence", function(){
+    // sig = [1,1,1,1...]
     var sig = _.map(_.range(32), function(idx){
-      return Math.round(Math.cos(Math.PI / 2 * idx));
+      return 1
     });
-    var conv = Signal.convolve(sig,sig);
-    conv.should.deep.equal(sig);
+    var conv = Signal.convolve(sig,sig,{type:"circular"});
+    _.each(conv,function(v){
+      v.should.equal(sig.length);
+    })
   });
 });
