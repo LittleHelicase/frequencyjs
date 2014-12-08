@@ -5,21 +5,29 @@ chai.should();
 var Signal = require("../lib/signal.js");
 var _ = require("lodash");
 
-describe("Signal Convolution", function(){
-  it("dirac impulse is the identity", function(){
-    var sig1 = _.range(100);
-    var sig2 = [1];
-    var conv = Signal.convolve(sig1,sig2);
-    conv.should.deep.equal(sig1);
+describe("Signal Equality", function(){
+  it("a signal should be equal to itself", function(){
+    var sig = _.range(27);
+    var areEqual = Signal.equal(sig, sig);
+    areEqual.should.be.true;
   });
-  it("constant sequence", function(){
-    // sig = [1,1,1,1...]
-    var sig = _.map(_.range(32), function(idx){
-      return 1
-    });
-    var conv = Signal.convolve(sig,sig,{type:"circular"});
-    _.each(conv,function(v){
-      v.should.equal(sig.length);
-    })
+  it("a signal should not equal a shorter version of itself", function(){
+    var sig = _.range(29);
+    var sig2 = sig.slice(0,27);
+    var areEqual = Signal.equal(sig,sig2);
+    areEqual.should.be.false;
   });
+  it("a signal should not equal a similar version of itself", function(){
+    var sig = _.range(17);
+    var sig2 = _.map(sig, function(v){ return v + 1E-2});
+    var areEqual = Signal.equal(sig,sig2);
+    areEqual.should.be.false;
+  });
+  it("should not fail for long signals", function(){
+    var sig = _.range(10);
+    var sig2 = sig.slice();
+    sig2[0]=0.1;
+    var areEqual = Signal.equal(sig,sig2);
+    areEqual.should.be.false;
+  })
 });

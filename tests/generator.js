@@ -3,6 +3,8 @@ var chai = require("chai");
 chai.should();
 
 var generator = require("../lib/generator.js");
+var signal = require("../lib/signal.js");
+var _ = require("lodash");
 
 describe("Signal generator", function(){
   describe("Sine generator", function(){
@@ -28,6 +30,26 @@ describe("Signal generator", function(){
       signal.frequency.should.equal(340);
       signal.amplitude.should.equal(3);
       signal.sampling.should.equal(2200);
-    })
+    });
+    it("should equal a normal sine", function(){
+      var sig = generator
+        .sine({frequency: 1, amplitude: 1})
+        .create({sampling: 10,length:10})
+        .values();
+      var sig2 = _.map(_.range(10), function(idx){ return Math.sin(Math.PI * idx / 5); });
+      var areEqual = signal.equal(sig,sig2,{epsilon:1e-5});
+      areEqual.should.be.true;
+    });
+    it("should be able to generate multiple sines", function(){
+      var sig = generator
+        .sines([{frequency: 1, amplitude: 1},
+          {frequency: 1, amplitude: 1},
+          {frequency: 1, amplitude: 1}])
+        .create({sampling: 10, length: 10})
+        .values();
+      var sig2 = _.map(_.range(10), function(idx){ return 3*Math.sin(Math.PI * idx / 5); });
+      var areEqual = signal.equal(sig,sig2,{epsilon:1e-5});
+      areEqual.should.be.true;
+    });
   });
 });
