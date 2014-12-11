@@ -4,6 +4,7 @@ chai.should();
 
 var generator = require("../lib/generator.js");
 var signal = require("../lib/signal.js");
+var processing = require("../lib/processing.js");
 var _ = require("lodash");
 
 describe("Signal generator", function(){
@@ -18,15 +19,13 @@ describe("Signal generator", function(){
     it("should create a signal of specified length", function(){
       var signal = generator
         .sine()
-        .create({length: 100})
-        .data();
+        .create({length: 100});
       signal.length.should.equal(100);
     });
     it("should use the given options", function(){
       var signal = generator
         .sine({frequency: 340, amplitude: 3})
-        .create({sampling: 2200})
-        .data();
+        .create({sampling: 2200});
       signal.frequency.should.equal(340);
       signal.amplitude.should.equal(3);
       signal.sampling.should.equal(2200);
@@ -37,7 +36,7 @@ describe("Signal generator", function(){
         .create({sampling: 10,length:10})
         .values();
       var sig2 = _.map(_.range(10), function(idx){ return Math.sin(Math.PI * idx / 5); });
-      var areEqual = signal.equal(sig,sig2,{epsilon:1e-5});
+      var areEqual = processing.equal(sig,sig2,{epsilon:1e-5});
       areEqual.should.be.true;
     });
     it("should be able to generate multiple sines", function(){
@@ -48,7 +47,7 @@ describe("Signal generator", function(){
         .create({sampling: 10, length: 10})
         .values();
       var sig2 = _.map(_.range(10), function(idx){ return 3*Math.sin(Math.PI * idx / 5); });
-      var areEqual = signal.equal(sig,sig2,{epsilon:1e-5});
+      var areEqual = processing.equal(sig,sig2,{epsilon:1e-5});
       areEqual.should.be.true;
     });
   });

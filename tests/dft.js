@@ -5,14 +5,14 @@ chai.should();
 
 var Generator = require("../lib/generator.js");
 var Transform = require("../lib/transform.js");
+var Processing = require("../lib/processing.js");
 
 describe("Discrete Fourier Transform", function(){
   it("should detect the frequency of the sine generator", function(){
     // generate signal of 440 hertz
     var signal = Generator
         .sine({frequency: 440})
-        .create({length: 100, sampling: 4400})
-        .data();
+        .create({length: 100, sampling: 4400});
 
     // calculate the dominant frequency of the signal using dft
     var domFreq = Transform
@@ -34,3 +34,12 @@ describe("Discrete Fourier Transform", function(){
     }
   });
 });
+describe("Backtransfrom via Generators", function(){
+  it("transform and backtransform should cancle out", function(){
+    var signal = Generator.sine({frequency: 32}).create({length:128,sampling:128});
+    var spec = Transform.toSpectrum(signal);
+    var baseSignal = Transform.toSignal(spec).create({length:128,sampling:128});
+    var areEqual = Processing.equal(signal, baseSignal);
+    areEqual.should.be.true;
+  });
+})

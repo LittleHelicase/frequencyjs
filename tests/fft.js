@@ -11,8 +11,7 @@ describe("Fast Fourier Transform", function(){
         // generate signal of 32 hertz (only powers of two are used in fft)
         var signal = Generator
             .sine({frequency: 32})
-            .create({length: 128, sampling: 128})
-            .data();
+            .create({length: 128, sampling: 128});
         var domFreq = Transform
             .toSpectrum(signal,{method: "fft"})
             .dominantFrequency();
