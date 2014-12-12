@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset='utf-8'>
+    <title>FrequencyJS</title>
+    <link rel="stylesheet" href="style/semantic.min.css">
+    <link rel="stylesheet" href="style/base.css">
+    <link rel="stylesheet" href="style/monokai_sublime.css">
+    <script src="js/semantic.min.js"></script>
+    <script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="ui segment title">
+        <h1 class="ui center aligned huge header">FrequencyJS</h1>
+        <center>
+            <small>
+            On Github <a href="https://github.com/LittleHelicase/frequencyjs"><i class="github icon"></i></a>
+            </small>
+        </center>
+    </div>
+    <div class="ui segment inv">
+        <div class="content">
+            <h2>The elegant signal analysis tool</h2>
+            <pre><code>
+    // simply calculate the spectrum from a signal
+    var spectrum = fjs.toSpectrum(signal, {samplingRate:2500});
+    // or the signal from a spectrum
+    var baseSignal = fjs.toSignal(spectrum);
+            </code></pre>
+            <p>FrequencyJS uses the DFT/FFT to calculate the spectrum</p>
+        </div>
+    </div>
+    <div class="ui segment light">
+        <div class="content">
+            <h2>Simple to use Generators</h2>
+            <pre><code>
+// use a generator to create a signal
+var sineGen = fjs.sine({frequency:200});
+var signal = sineGen.create({length:100, samplingRate:400});
+
+// use a generator to create a signal from multiple frequencies
+var gen = fjs.sines([{frequency:10, amplitude:20},{frequency:30,amplitude:10}]);
+var signal2 = gen.create({length:500, samplingRate:100});
+        </code></pre>
+        <p>Simply create signals of different frequencies. There is more to come...</p>
+        </div>
+    </div>
+    <div class="ui segment inverted">
+        <div class="content">
+            <h2>Implements fast convolution algorithms</h2>
+        </div>
+    </div>
+  </body>
+</html>

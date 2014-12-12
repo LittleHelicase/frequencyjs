@@ -1,0 +1,44 @@
+body {
+    background-color: #a4d94c;
+    font-size:130%;
+}
+
+.ui.segment.title {
+    background-color: #e2ebd4;
+    font-size: 280%;
+}
+
+.content {
+    margin:auto;
+    padding: 20px;
+    width:70%;
+}
+
+h2 {
+    color:white;
+    font-size: 300%;
+}
+
+.segment {
+    margin-top:0px!important;
+    margin-bottom:0px!important;
+    padding-bottom:80px!important;
+}
+.segment.inv {
+    background-color:transparent;
+}
+
+.segment.light {
+    background-color: #e2ebd4;
+}
+
+.segment.light .content h2 {
+    color:black;
+}
+
+pre {
+    
+}
+pre code {
+    padding: 10px 20px 10px 25px!important;
+}
