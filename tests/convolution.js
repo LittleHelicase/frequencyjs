@@ -28,5 +28,14 @@ describe("Signal Convolution", function(){
     var sig_sig = Processing.convolve(sig,sig,{type:"circular"});
     var sig_pSig = Processing.convolve(sig,pSig,{type:"circular"});
     sig_sig.should.deep.equal(sig_pSig);
-  })
+  });
+  it("should be able to use the fft for convolutions", function(){
+    var sig = _.map(_.range(32), function(idx){
+      return 1;
+    });
+    var conv = Processing.convolve(sig,sig,{type:"circular", method:"fft-convolution"});
+    _.each(conv, function(v){
+      v.should.equal(sig.length);
+    });
+  });
 });
