@@ -1,5 +1,7 @@
 var gulp = require("gulp");
 var mocha = require('gulp-mocha');
+var browserify = require('gulp-browserify');
+var rename = require("gulp-rename");
 
 var testFiles = [
   'tests/*.js'
@@ -16,9 +18,8 @@ gulp.task('test', function() {
 });
 
 gulp.task('default', function() {
-  gulp.src(testFiles)
-    .pipe(karma({
-      configFile: 'karma.conf.js',
-      action: 'watch'
-    }));
+  gulp.src("index.js")
+    .pipe(browserify({}))
+    .pipe(rename("fjs.js"))
+    .pipe(gulp.dest("./dist/"));
 });
