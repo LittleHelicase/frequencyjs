@@ -33,8 +33,7 @@ describe("Signal generator", function(){
     it("should equal a normal sine", function(){
       var sig = generator
         .sine({frequency: 1, amplitude: 1})
-        .create({sampling: 10,length:10})
-        .values();
+        .create({sampling: 10,length:10});
       var sig2 = _.map(_.range(10), function(idx){ return Math.sin(Math.PI * idx / 5); });
       var areEqual = processing.equal(sig,sig2,{epsilon:1e-5});
       areEqual.should.be.true;
