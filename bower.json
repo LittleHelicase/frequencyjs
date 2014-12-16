@@ -1,0 +1,30 @@
+{
+  "name": "frequencyjs",
+  "main": "index.js",
+  "version": "0.0.3",
+  "homepage": "https://github.com/LittleHelicase/frequencyjs",
+  "authors": [
+    "Maximilian Klein <dasmaxl@gmail.com>"
+  ],
+  "description": "A signal analysis tool",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "Signal",
+    "processing",
+    "Frequency",
+    "analysis"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lodash": "~2.4.1"
+  }
+}

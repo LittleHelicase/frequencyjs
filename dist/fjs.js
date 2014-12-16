@@ -2313,13 +2313,109 @@ module.exports = {
 
 var Generators = require("./lib/generator.js");
 var Transform = require("./lib/transform.js");
+var Signal = require("./lib/signal.js");
+var Processing = require("./lib/processing.js");
 
 module.exports = {
+  Processing: Processing,
   Generators: Generators,
-  Transform: Transform
+  Transform: Transform,
+  toSpectrum: Transform.toSpectrum,
+  toSignal: Transform.toSignal,
+  signal: Signal,
+  sine: Generators.sine,
+  sines: Generators.sines,
+  convolve: Processing.convolve,
+  version: "0.0.3"
 }
 
-},{"./lib/generator.js":3,"./lib/transform.js":5}],3:[function(require,module,exports){
+},{"./lib/generator.js":5,"./lib/processing.js":6,"./lib/signal.js":7,"./lib/transform.js":8}],3:[function(require,module,exports){
+/**
+  * implementation of the discrete convolution for arbitrary signals
+  * doesn't require any periodicity like the fast convolution
+  * 
+  * preferable when the second signal (filter) is short.
+  */
+
+var _ = require("lodash");
+
+var mod = function(m,n){
+  return ((m % n) + n) % n;
+}
+
+var nonCircular = function(signal1, signal2){
+  var len1 = signal1.length;
+  var len2 = signal2.length;
+  var half = Math.floor(len2 / 2);
+  
+  var convolved = _.map(_.range(len1), function(idx1){
+    var cVal = _.reduce(_.range(len2), function(acc, idx2){
+      var curIdx = idx1 - idx2;
+      if(0 <= curIdx && curIdx < len1){
+        // actual convolution
+        return acc + signal1[curIdx] * signal2[idx2];
+      }
+      // range test. If our index is not within the signal1 
+      // we simply return the current value of the convolution
+      return acc;
+    }, 0);
+    return cVal;
+  });
+  
+  return convolved;
+}
+
+var circular = function(signal1, signal2){
+  var len1 = signal1.length;
+  var len2 = signal2.length;
+  var half = Math.floor(len2 / 2);
+  
+  var convolved = _.map(_.range(len1), function(idx1){
+    var cVal = _.reduce(_.range(len1), function(acc, idx2){
+      var curIdx = idx1 - idx2;
+      return acc + signal1[idx2] * signal2[mod(curIdx,len2)];
+    }, 0);
+    return cVal;
+  });
+  
+  return convolved;
+}
+
+var methodForType = {"non-circular" : nonCircular,"circular": circular};
+
+module.exports = function(signal1, signal2, options){
+  var convMethod = methodForType[options.type];
+  return convMethod(signal1,signal2);
+}
+
+},{"lodash":9}],4:[function(require,module,exports){
+/**
+  * convolution using a spectrum (usually fft) method to calculate the spectrum
+  * multiply them and backtransform back into a signal. Only for periodic
+  * signals
+  */
+
+var transform = require("../transform.js");
+var _ = require("lodash");
+
+module.exports = function(signal1, signal2, options){
+  var spec1 = transform.toSpectrum(signal1, options.spectrum);
+  var spec2 = transform.toSpectrum(signal2, options.spectrum);
+  // spec1.len > spec2.len every spec1.len/spec2.len frequency
+  // is used. This only works for power of 2 length, but the FFT
+  // requires power 2 lengths
+  var idxDist = spec1.length / spec2.length;
+  
+  // multiply only every idxDist frequency, all other multiplications
+  // are zero and thus we only need to back transform the shorter spectrum
+  var convSpec = _.map(_.range(spec2.legnth), function(idx){
+    return spec1[idx*idxDist] * spec2[idx];
+  });
+  convSpec.sampling = 1;
+  return transform.toSignal(convSpec,options.spectrum);
+}
+
+},{"../transform.js":8,"lodash":9}],5:[function(require,module,exports){
 /**
   * Generators for different signals (currently only sine waves)
   */
@@ -2408,7 +2504,64 @@ var Generators = {
 
 module.exports = Generators;
 
-},{"../dsp.js":1,"./signal.js":4,"lodash":6}],4:[function(require,module,exports){
+},{"../dsp.js":1,"./signal.js":7,"lodash":9}],6:[function(require,module,exports){
+/**
+  * (Advanced) Signal processing
+  */
+
+var cauchy = require("./convolution/cauchy.js");
+var specConvolution = require("./convolution/spectrum.js");
+var _ = require("lodash");
+var Signal = require("./signal.js");
+
+var defaultOptions = {
+  method: "cauchy",
+  type: "non-circular",
+  spectrum: {
+    method: "dft"
+    // sampling is not relevant as it gets transformed back again with the same
+    // sampling rate
+  }
+}
+
+module.exports = {
+  /** the convolution function assumes two discrete signals
+    * that have the same spacing
+    */
+  convolve: function(signal1, signal2, options){
+    options = options || {};
+    options = _.defaults(options, defaultOptions);
+    
+    // ensure signal2 is not longer than signal2
+    if(signal1.length < signal2.length){
+      var tmp = signal1;
+      signal1 = signal2;
+      signal2 = tmp;
+    }
+    
+    if(options.method == "cauchy"){
+      return cauchy(signal1,signal2,options);
+    } else {
+      return specConvolution(signal1, signal2,options);
+    }
+  },
+  /** determines if two signals can be considered equal.
+    */
+  equal: function(signal1, signal2, options){
+    options = options || {};
+    options.epsilon = options.epsilon || 1E-08;
+    var sig1 = Signal(signal1);
+    var sig2 = Signal(signal2);
+    if(signal1.length != signal2.length) return false;
+    var diffSQ = _.reduce(_.range(signal1.length), function(d,idx){
+      var diff = (sig1[idx].value-sig2[idx].value);
+        return d + diff * diff;
+    },0);
+    return diffSQ/signal1.length < options.epsilon;
+  }
+}
+
+},{"./convolution/cauchy.js":3,"./convolution/spectrum.js":4,"./signal.js":7,"lodash":9}],7:[function(require,module,exports){
 /**
   * (Advanced) Signal processing
   */
@@ -2444,7 +2597,7 @@ var signal = function(sig, options){
 
 module.exports = signal;
 
-},{"lodash":6}],5:[function(require,module,exports){
+},{"lodash":9}],8:[function(require,module,exports){
 /**
   * Transforms a signal into its frequencies or vice versa
   */
@@ -2519,7 +2672,7 @@ module.exports = {
   }
 }
 
-},{"../dsp.js":1,"./generator.js":3,"./signal.js":4,"lodash":6}],6:[function(require,module,exports){
+},{"../dsp.js":1,"./generator.js":5,"./signal.js":7,"lodash":9}],9:[function(require,module,exports){
 (function (global){
 /**
  * @license

@@ -6,6 +6,18 @@ A library for computing the frequencies of signals. It will include
 *Fourier Transformation* (under development) and *Wavelet Transformation* with
 different basis functions. It also includes a very simple tone generator.
 
+# Installation
+
+Simply via `npm` oder `bower` (package will soon be added to bower).
+
+```
+npm install frequencyjs
+```
+
+```
+bower install frequencyjs
+```
+
 # Usage
 
 frequencyjs consists of the following packages
@@ -21,8 +33,7 @@ To generate a signal simply do
 var fjs = require("frequencyjs");
 fjs.Generator
   .sine({frequency:440})  // there will be different types here
-  .create({length: 2200, sampling: 2200})
-  .data() // data will give you a list of objects [{t:0,value:0},...]
+  .create({length: 2200, sampling: 2200}); // data will give you a list of objects [{t:0,value:0},...]
 ```
 
 ## Transformators
