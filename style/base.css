@@ -42,3 +42,26 @@ pre {
 pre code {
     padding: 10px 20px 10px 25px!important;
 }
+
+.flex_container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.graphs {
+  padding: 40px;
+  background-color: #e2ebd4;
+  width: 90vw;
+  margin-left:-10vw;
+  margin-top: 80px;
+  border-radius: 40px;
+}
+
+h3 {
+  font-size:160%;
+  text-align: center;
+}
+
+.inverted a {
+  color:white!important;
+}
