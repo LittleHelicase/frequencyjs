@@ -8,7 +8,7 @@ body {
     font-size: 280%;
 }
 
-.content {
+.seg-content {
     margin:auto;
     padding: 20px;
     width:70%;
@@ -64,4 +64,8 @@ h3 {
 
 .inverted a {
   color:white!important;
+}
+
+.main-button {
+  min-width:100px;
 }

@@ -3,13 +3,13 @@
   <head>
     <meta charset='utf-8'>
     <title>FrequencyJS</title>
-    <link rel="stylesheet" href="style/semantic.min.css">
+    <link rel="stylesheet" href="bower_components/semantic-ui/dist/semantic.min.css">
     <link rel="stylesheet" href="style/base.css">
     <link rel="stylesheet" href="style/monokai_sublime.css">
     <link rel="stylesheet" href="style/graph.css">
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/lodash/dist/lodash.min.js"></script>
-    <script src="js/semantic.min.js"></script>
+    <script src="bower_components/semantic-ui/dist/semantic.min.js"></script>
     <script src="js/highlight.pack.js"></script>
     <script src="bower_components/d3/d3.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
@@ -18,13 +18,22 @@
     <div class="ui segment title">
         <h1 class="ui center aligned huge header">FrequencyJS</h1>
         <center>
-            <small>
-            @Github <a href="https://github.com/LittleHelicase/frequencyjs"><i class="github icon"></i></a>
-            </small>
+          <a class="ui animated button vertical blue" href="https://raw.githubusercontent.com/LittleHelicase/frequencyjs/0.0.3/dist/fjs.js" download>
+            <div class="hidden content">Download</div>
+            <div class="visible content main-button"><i class="download icon"></i></div>
+          </a>
+          <a class="ui animated button vertical teal" href="#">
+            <div class="hidden content">Infos</div>
+            <div class="visible content main-button"><i class="info icon"></i></div>
+          </a>
+          <div class="ui animated button vertical orange" href="https://github.com/LittleHelicase/frequencyjs">
+            <div class="hidden content">@Github</div>
+            <div class="visible content main-button"><i class="github icon"></i></div>
+          </div>
         </center>
     </div>
     <div class="ui segment inv">
-        <div class="content">
+        <div class="seg-content">
             <h2>The elegant signal analysis tool</h2>
             <pre><code>
 // simply calculate the spectrum from a signal
@@ -40,7 +49,7 @@ var baseSignal = fjs.toSignal(spectrum);
         </div>
     </div>
     <div class="ui segment light">
-        <div class="content">
+        <div class="seg-content">
             <h2>Simple to use Generators</h2>
             <pre><code>
 // use a generator to create a signal
@@ -55,7 +64,7 @@ var signal2 = gen.create({length:500, samplingRate:100});
         </div>
     </div>
     <div class="ui segment inv">
-        <div class="content">
+        <div class="seg-content">
             <h2>Implements fast convolution algorithms</h2>
         <pre><code>
 // use cauchy product like convolution mechanism
