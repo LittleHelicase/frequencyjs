@@ -13,7 +13,7 @@ describe("Discrete Fourier Transform", function(){
     var signal = Generator
         .sine({frequency: 440})
         .create({length: 100, sampling: 4400});
-
+  
     // calculate the dominant frequency of the signal using dft
     var domFreq = Transform
       .toSpectrum(signal,{method: "dft"})
@@ -25,7 +25,7 @@ describe("Discrete Fourier Transform", function(){
       cosFunc = _.map(_.range(8), function (idx) {
         return Math.cos(i * 2 * Math.PI / 8 * idx);
       });
-
+  
       // calculate the dominant frequency of the signal using dft
       var domFreq = Transform
           .toSpectrum(cosFunc,{method: "dft", sampling:8})
@@ -42,4 +42,4 @@ describe("Backtransfrom via Generators", function(){
     var areEqual = Processing.equal(signal, baseSignal);
     areEqual.should.be.true;
   });
-})
+});
