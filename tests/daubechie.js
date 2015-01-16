@@ -9,11 +9,13 @@ var Processing = require("../lib/processing.js");
 var Signals = require("../lib/utils/signals.js");
 
 describe("Daubechies Wavelet Transform", function(){
-  it("should equal haar for D2", function(){
-    var sineSig = Generator.sine().create({length:1024});
-    var haarSpec = Transform.toSpectrum(sineSig, {method: "haar",sampling:8});
-    var daubSpec = Transform.toSpectrum(sineSig, {method: "daubechies", taps:2,sampling:8});
-    haarSpec.dominantFrequency().frequency.should.equal(daubSpec.dominantFrequency().frequency);
+  it("should transform and backtransform an impuls correctly", function(){
+    var impuls = [1,2,3,4,5,6,7,8];
+    var spec = Transform
+      .toSpectrum(impuls,{method:"daubechies"});
+    var impBack = Transform.toSignal(spec,{method:"daubechies"});
+    var areEqual = Processing.equal(impBack,impuls);
+    areEqual.should.be.true;
   });
   it("should be invertible", function(){
     var signal = Generator.sines([

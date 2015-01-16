@@ -33,21 +33,31 @@ describe("Haar Wavelet Transform", function(){
     var areEqual = Processing.equal(spec, [0.25,0.25,0.5,0]);
     areEqual.should.be.true;
   });
-  it("should be invertible", function(){
+  it("should invert an impuls correctly", function(){
     var spec = Spectrum([0.25,0.25,0.5,0],{timeDependent: true, sampling:4});
     var signal = Transform
       .toSignal(spec,{method:"haar"});
     signal.sampling.should.be.equal(4);
-    console.log(signal);
     var areEqual = Processing.equal(signal, [1,0,0,0]);
     areEqual.should.be.true;
-/*    var signal = Generator.sines([
-      {frequency: 40, amplitude: 0.5},
-      {frequency: 12, amplitude: 0.8},
-      ]).create({length:128, sampling: 100});
+  });
+  it("should transform and backtransform an impuls correctly", function(){
+    var impuls = [1,2,3,4,5,6,7,8];
+    var spec = Transform
+      .toSpectrum(impuls,{method:"haar"});
+    var impBack = Transform.toSignal(spec,{method:"haar"});
+    var areEqual = Processing.equal(impBack,impuls);
+    areEqual.should.be.true;
+  });
+  it("should invert a longer signal correctly", function(){
+    var signal = Generator.sines([
+    {frequency: 40, amplitude: 0.5},
+    {frequency: 12, amplitude: 0.8},
+    ]).create({length:128, sampling: 100});
     var spec = Transform.toSpectrum(signal,{method:"haar"});
     var signalBack = Transform.toSignal(spec,{method:"haar"});
     var areEqual = Processing.equal(signal, signalBack);
-    areEqual.should.be.true;*/
+    //console.log(signal,signalBack);
+    areEqual.should.be.true;
   });
 });
