@@ -1223,17 +1223,18 @@ function IIRFilter(type, cutoff, resonance, sampleRate) {
   }
 }
 
-IIRFilter.prototype.__defineGetter__('cutoff',
-  function() {
+Object.defineProperty(IIRFilter, 'cutoff', {
+  get: function cutoff() {
     return this.func.cutoff;
   }
-);
+});
 
-IIRFilter.prototype.__defineGetter__('resonance',
-  function() {
+Object.defineProperty(IIRFilter, 'resonance', {
+  get: function cutoff() {
     return this.func.resonance;
   }
-);
+});
+
 
 IIRFilter.prototype.set = function(cutoff, resonance) {
   this.func.calcCoeff(cutoff, resonance);
